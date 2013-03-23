@@ -1,6 +1,6 @@
 ;p1.asm
 
-%include "system.inc"
+%include "../system.inc"
 
 section .bss 
 
