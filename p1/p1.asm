@@ -21,7 +21,7 @@ section .text
 
 _start:
 
-        mov     edx, len1      ;write prompt
+        mov     edx, len1      ;write prompt 
         mov     ecx, str1
         mov     ebx, 1
         mov     eax, 4
