@@ -24,9 +24,7 @@ _start:
 
         mov     edx, len1      ;write prompt 
         mov     ecx, str1
-        mov     ebx, 1
-        mov     eax, 4
-        int     0x80        
+        call    print     
 
 startLoop:
         rawmode
@@ -45,9 +43,7 @@ startLoop:
 
         mov     edx, 1         ;write char
         mov     ecx, char
-        mov     ebx, 1
-        mov     eax, 4
-        int     0x80
+        call    print
 
         mov     al, [low]      ;compare to low
         cmp     al, [char]
@@ -67,31 +63,17 @@ setLow:
         jmp     endLoop
 
 exit:
-        mov     edx, 1            ;new line
-        mov     ecx, cr
-        mov     ebx, 1
-        mov     eax, 4
-        int     0x80
+        call    newLine
 
         mov     edx, len2         ;write explanation
         mov     ecx, str2
-        mov     ebx, 1
-        mov     eax, 4
-        int     0x80
+        call    print
 
         mov     edx, 1            ;write lowest character
         mov     ecx, low
-        mov     ebx, 1
-        mov     eax, 4
-        int     0x80
+        call    print
 
-        mov     edx, 1            ;new line
-        mov     ecx, cr     
-        mov     ebx, 1
-        mov     eax, 4
-        int     0x80
-
-
+        call    newLine
 
         mov     eax, 1            ;exit
         int     0x80
@@ -110,6 +92,22 @@ isValidChar:
 retValidChar:
 	mov     [valid], eax
 	ret
+
+newLine:
+	mov     edx, 1            ;new line
+        mov     ecx, cr     
+        mov     ebx, 1
+        mov     eax, 4
+        int     0x80
+	ret
+
+print:	
+        mov     ebx, 1
+        mov     eax, 4
+        int     0x80
+	ret
+	
+	
 	
 
        
