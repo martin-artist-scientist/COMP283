@@ -15,6 +15,7 @@ len2    equ     $ - str2
 cr      db      0x0A
 count   db      0
 low     db      0x5B
+valid   db      0
 
 section .text
         global _start
@@ -36,13 +37,11 @@ startLoop:
         int     0x80
         normalmode
 
-        mov     al, [char]     ;char greater than 'Z' ignore it
-        cmp     al, 0x5A
-        jg      startLoop
-
-        mov     al, [char]     ;char less than 'A' ignore it
-        cmp     al, 0x41  
-        jl      startLoop
+	call    isValidChar
+       
+        mov     al, 0          ;repeat loop if char is invalid
+        cmp     al, [valid]  
+        je      startLoop
 
         mov     edx, 1         ;write char
         mov     ecx, char
@@ -96,5 +95,21 @@ exit:
 
         mov     eax, 1            ;exit
         int     0x80
+
+isValidChar:
+	mov     eax, 0
+        mov     al, [char]     ;char greater than 'Z' ignore it
+        cmp     al, 0x5A
+        jg      retValidChar
+
+        mov     al, [char]     ;char less than 'A' ignore it
+        cmp     al, 0x41  
+        jl      retValidChar
+
+	mov     eax, 1
+retValidChar:
+	mov     [valid], eax
+	ret
+	
 
        
