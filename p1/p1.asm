@@ -1,6 +1,6 @@
 ;p1.asm
 
-%include "../system.inc"
+%include "system.inc"
 
 section .bss 
 
@@ -37,8 +37,8 @@ startLoop:
 
 	call    isValidChar
        
-        mov     al, 0          ;repeat loop if char is invalid
-        cmp     al, [valid]  
+        mov     al, [valid]    ;repeat loop if char is invalid
+        cmp     al, 0  
         je      startLoop
 
         mov     edx, 1         ;write char
@@ -79,7 +79,7 @@ exit:
         int     0x80
 
 isValidChar:
-	mov     eax, 0
+	mov     bl, 0
         mov     al, [char]     ;char greater than 'Z' ignore it
         cmp     al, 0x5A
         jg      retValidChar
@@ -88,17 +88,15 @@ isValidChar:
         cmp     al, 0x41  
         jl      retValidChar
 
-	mov     eax, 1
+	mov     bl, 1
 retValidChar:
-	mov     [valid], eax
+	mov     [valid], bl
 	ret
 
 newLine:
 	mov     edx, 1            ;new line
-        mov     ecx, cr     
-        mov     ebx, 1
-        mov     eax, 4
-        int     0x80
+        mov     ecx, cr    
+        call    print
 	ret
 
 print:	
